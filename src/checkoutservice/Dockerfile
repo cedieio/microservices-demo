@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.22.6-alpine@sha256:1a478681b671001b7f029f94b5016aed984a23ad99c707f6a0ab6563860ae2f3 as builder
+FROM --platform=$BUILDPLATFORM golang:1.22.6-alpine as builder
 WORKDIR /src
-
+ENV GOPROXY=direct
+RUN apk add --no-cache git
 # restore dependencies
 COPY go.mod go.sum ./
 RUN go mod download
@@ -35,5 +36,5 @@ COPY --from=builder /checkoutservice /src/checkoutservice
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 
-EXPOSE 5050
+EXPOSE 5050 6060
 ENTRYPOINT ["/src/checkoutservice"]

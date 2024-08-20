@@ -66,9 +66,10 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: {{ .Values.images.repository }}/{{ .Values.checkoutService.name }}:{{ .Values.images.tag | default .Chart.AppVersion }}
+        image: {{ .Values.checkoutService.image }}
         ports:
         - containerPort: 5050
+        - containerPort: 6060
         readinessProbe:
           grpc:
             port: 5050
@@ -122,6 +123,9 @@ spec:
   - name: grpc
     port: 5050
     targetPort: 5050
+  - name: pprof
+    port: 6060
+    targetPort: 6060
 {{- if .Values.networkPolicies.create }}
 ---
 apiVersion: networking.k8s.io/v1

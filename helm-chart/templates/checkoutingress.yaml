@@ -1,0 +1,24 @@
+{{- if .Values.checkoutService.ingress.create }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+  name: {{ .Values.checkoutService.ingress.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ingressClassName: {{ .Values.checkoutService.ingress.className }}
+  rules:
+  {{- range .Values.checkoutService.ingress.hosts }}
+  - host: {{ .host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ $.Values.checkoutService.name }}
+            port:
+              number: {{ .port }} 
+        path: {{ .path }}
+        pathType: Prefix
+  {{- end }}
+{{- end }}

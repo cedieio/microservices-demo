@@ -1,0 +1,6 @@
+releases:
+  - name: demo-app
+    chart: ./onlineboutique-0.10.1.tgz
+    namespace: demo-app-{{ .Environment.Name }}-v1
+    values:
+      - values.yaml

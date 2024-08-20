@@ -80,6 +80,14 @@ cartService:
 
 checkoutService:
   create: true
+  ingress:
+    create: true
+    name: checkoutingress
+    className: internal
+    hosts:
+      - host: pprof.playpen-observability.apse2.k8s.ffxblue.io
+        port: 6060
+        path: /debug/pprof
   name: checkoutservice
   resources:
     requests:
@@ -137,7 +145,7 @@ frontend:
       memory: 128Mi
 
 loadGenerator:
-  create: true
+  create: false
   name: loadgenerator
   checkFrontendInitContainer: true
   resources:
