@@ -35,5 +35,5 @@ COPY ./static ./static
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 
-EXPOSE 8080
+EXPOSE 8080 6060
 ENTRYPOINT ["/src/server"]

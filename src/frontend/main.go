@@ -18,6 +18,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	_ "net/http/pprof" // Import the pprof package for side-effect
 	"os"
 	"time"
 
@@ -160,6 +161,13 @@ func main() {
 	r.HandleFunc(baseUrl + "/_healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
 	r.HandleFunc(baseUrl + "/product-meta/{ids}", svc.getProductByID).Methods(http.MethodGet)
 	r.HandleFunc(baseUrl + "/bot", svc.chatBotHandler).Methods(http.MethodPost)
+
+	go func() {
+		log.Println("Starting pprof on :6060")
+		if err := http.ListenAndServe(":6060", nil); err != nil {
+			log.Fatalf("pprof failed: %v", err)
+		}
+	}()
 
 	var handler http.Handler = r
 	handler = &logHandler{log: log, next: handler}     // add logging

@@ -19,6 +19,8 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"net/http"
+	_ "net/http/pprof" // Import the pprof package for side-effect
 	"os"
 	"os/signal"
 	"sync"
@@ -108,6 +110,13 @@ func main() {
 				reloadCatalog = false
 				log.Infof("Disable catalog reloading")
 			}
+		}
+	}()
+
+	go func() {
+		log.Println("Starting pprof on :6060")
+		if err := http.ListenAndServe(":6060", nil); err != nil {
+			log.Fatalf("pprof failed: %v", err)
 		}
 	}()
 

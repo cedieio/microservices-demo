@@ -35,5 +35,5 @@ ENV APP_PORT=50051
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 
-EXPOSE 50051
+EXPOSE 50051 6060
 ENTRYPOINT ["/src/shippingservice"]

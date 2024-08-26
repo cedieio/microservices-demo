@@ -36,5 +36,5 @@ COPY products.json .
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 
-EXPOSE 3550
+EXPOSE 3550 6060
 ENTRYPOINT ["/src/server"]

@@ -17,6 +17,8 @@ package main
 import (
 	"fmt"
 	"net"
+	"net/http"
+	_ "net/http/pprof" // Import the pprof package for side-effect
 	"os"
 	"time"
 
@@ -87,6 +89,14 @@ func main() {
 		log.Info("Stats disabled.")
 		srv = grpc.NewServer()
 	}
+
+	go func() {
+		log.Println("Starting pprof on :6060")
+		if err := http.ListenAndServe(":6060", nil); err != nil {
+			log.Fatalf("pprof failed: %v", err)
+		}
+	}()
+
 	svc := &server{}
 	pb.RegisterShippingServiceServer(srv, svc)
 	healthpb.RegisterHealthServer(srv, svc)
